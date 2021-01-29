@@ -15,9 +15,20 @@ io.on('connection', (socket) => {
     console.log('new socket connection....')
     socket.emit('message','Welcome!')
 
-    socket.on('sendMessage',(message)=>{
+    //io.broadcast.emit('message','new user joined..')
+    socket.broadcast.emit('message','new user joined..')
+
+    socket.on('sendMessage',(message,callback)=>{
 
         io.emit('message',message)
+        callback();
+    })
+    socket.on('disconnect',()=>{
+        io.emit('message',"user left...")
+    })
+    socket.on('sendLocation',(cords)=>{
+
+        io.emit('message',`https://google.com/maps?q=${cords.latitude},${cords.longitude}`)
     })
 
     /* socket.emit('countUpdated',count)
